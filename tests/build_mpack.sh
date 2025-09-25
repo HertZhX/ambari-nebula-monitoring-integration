@@ -150,10 +150,23 @@ build_mpack() {
     local mpack_filename="${MPACK_NAME}-${MPACK_VERSION}.tar.gz"
     local mpack_path="$DIST_DIR/$mpack_filename"
     
-    # 创建tar包
-    cd "$BUILD_DIR"
-    tar -czf "$mpack_path" .
+    # 使用更简单的打包方式，创建一个临时目录并将内容正确组织
+    local temp_dir="$(mktemp -d)"
+    local mpack_root="$temp_dir/root"
+    
+    # 创建root目录
+    mkdir -p "$mpack_root"
+    
+    # 复制所有文件到root目录
+    cp -r "$BUILD_DIR"/* "$mpack_root/"
+    
+    # 创建tar包 - 从临时目录的父目录打包，确保有正确的根目录结构
+    cd "$temp_dir"
+    tar -czf "$mpack_path" "root"
     cd "$PROJECT_ROOT"
+    
+    # 清理临时目录
+    rm -rf "$temp_dir"
     
     if [[ -f "$mpack_path" ]]; then
         log_success "Mpack package created: $mpack_path"
