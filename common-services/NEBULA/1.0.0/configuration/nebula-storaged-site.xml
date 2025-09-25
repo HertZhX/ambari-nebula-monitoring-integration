@@ -1,0 +1,246 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<configuration>
+  
+  <property>
+    <name>port</name>
+    <display-name>Storaged Service Port</display-name>
+    <value>9779</value>
+    <description>Storaged服务端口</description>
+    <value-attributes>
+      <type>int</type>
+      <minimum>1024</minimum>
+      <maximum>65535</maximum>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>ws_http_port</name>
+    <display-name>Storaged HTTP Port</display-name>
+    <value>19779</value>
+    <description>Storaged HTTP管理端口</description>
+    <value-attributes>
+      <type>int</type>
+      <minimum>1024</minimum>
+      <maximum>65535</maximum>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>ws_h2_port</name>
+    <display-name>Storaged HTTP/2 Port</display-name>
+    <value>19780</value>
+    <description>Storaged HTTP/2管理端口</description>
+    <value-attributes>
+      <type>int</type>
+      <minimum>1024</minimum>
+      <maximum>65535</maximum>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>data_path</name>
+    <display-name>Storaged Data Path</display-name>
+    <value>{{nebula_data_dir}}/storage</value>
+    <description>Storaged数据存储路径</description>
+    <value-attributes>
+      <type>directory</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>local_config</name>
+    <display-name>Local Config</display-name>
+    <value>true</value>
+    <description>是否使用本地配置文件</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property require-input="true">
+    <name>meta_server_addrs</name>
+    <display-name>Metad Server Addresses</display-name>
+    <value>{{metad_hosts_with_port}}</value>
+    <description>Metad服务器地址列表，格式: host1:port,host2:port</description>
+    <value-attributes>
+      <empty-value-valid>false</empty-value-valid>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>heartbeat_interval_secs</name>
+    <display-name>Heartbeat Interval</display-name>
+    <value>10</value>
+    <description>心跳间隔时间（秒）</description>
+    <value-attributes>
+      <type>int</type>
+      <minimum>1</minimum>
+      <maximum>300</maximum>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>num_io_threads</name>
+    <display-name>IO Threads</display-name>
+    <value>16</value>
+    <description>IO线程数量</description>
+    <value-attributes>
+      <type>int</type>
+      <minimum>1</minimum>
+      <maximum>128</maximum>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>num_worker_threads</name>
+    <display-name>Worker Threads</display-name>
+    <value>32</value>
+    <description>工作线程数量</description>
+    <value-attributes>
+      <type>int</type>
+      <minimum>1</minimum>
+      <maximum>128</maximum>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>log_level</name>
+    <display-name>Log Level</display-name>
+    <value>INFO</value>
+    <description>日志级别</description>
+    <value-attributes>
+      <entries>
+        <entry>
+          <value>DEBUG</value>
+          <label>DEBUG</label>
+        </entry>
+        <entry>
+          <value>INFO</value>
+          <label>INFO</label>
+        </entry>
+        <entry>
+          <value>WARN</value>
+          <label>WARN</label>
+        </entry>
+        <entry>
+          <value>ERROR</value>
+          <label>ERROR</label>
+        </entry>
+        <entry>
+          <value>FATAL</value>
+          <label>FATAL</label>
+        </entry>
+      </entries>
+      <selection-cardinality>1</selection-cardinality>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>rocksdb_wal_sync</name>
+    <display-name>RocksDB WAL Sync</display-name>
+    <value>true</value>
+    <description>RocksDB WAL同步设置</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>rocksdb_column_family_options</name>
+    <display-name>RocksDB Column Family Options</display-name>
+    <value>{}</value>
+    <description>RocksDB列族选项配置（JSON格式）</description>
+    <value-attributes>
+      <type>multiLine</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>rocksdb_db_options</name>
+    <display-name>RocksDB Database Options</display-name>
+    <value>{}</value>
+    <description>RocksDB数据库选项配置（JSON格式）</description>
+    <value-attributes>
+      <type>multiLine</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>rocksdb_block_cache</name>
+    <display-name>RocksDB Block Cache Size</display-name>
+    <value>1073741824</value>
+    <description>RocksDB块缓存大小（字节）</description>
+    <value-attributes>
+      <type>int</type>
+      <minimum>67108864</minimum>
+      <maximum>68719476736</maximum>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>enable_auto_compactions</name>
+    <display-name>Enable Auto Compactions</display-name>
+    <value>true</value>
+    <description>是否启用自动压缩</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>enable_partitioning_on_compaction</name>
+    <display-name>Enable Partitioning on Compaction</display-name>
+    <value>true</value>
+    <description>是否在压缩时启用分区</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>custom_filter_interval_secs</name>
+    <display-name>Custom Filter Interval</display-name>
+    <value>24</value>
+    <description>自定义过滤器间隔时间（小时）</description>
+    <value-attributes>
+      <type>int</type>
+      <minimum>1</minimum>
+      <maximum>168</maximum>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+</configuration>

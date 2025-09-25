@@ -1,0 +1,299 @@
+{
+  "NEBULA": {
+    "service": [
+      {
+        "name": "nebula_graphd_process",
+        "label": "Nebula Graphd Process",
+        "description": "This alert is triggered if the Nebula Graphd process cannot be confirmed to be up and listening on the network.",
+        "interval": 1,
+        "scope": "ANY",
+        "enabled": true,
+        "source": {
+          "type": "SCRIPT",
+          "path": "NEBULA/1.0.0/package/scripts/alerts/alert_graphd_process.py",
+          "parameters": []
+        }
+      },
+      {
+        "name": "nebula_metad_process",
+        "label": "Nebula Metad Process",
+        "description": "This alert is triggered if the Nebula Metad process cannot be confirmed to be up and listening on the network.",
+        "interval": 1,
+        "scope": "ANY",
+        "enabled": true,
+        "source": {
+          "type": "SCRIPT",
+          "path": "NEBULA/1.0.0/package/scripts/alerts/alert_metad_process.py",
+          "parameters": []
+        }
+      },
+      {
+        "name": "nebula_storaged_process",
+        "label": "Nebula Storaged Process",
+        "description": "This alert is triggered if the Nebula Storaged process cannot be confirmed to be up and listening on the network.",
+        "interval": 1,
+        "scope": "ANY",
+        "enabled": true,
+        "source": {
+          "type": "SCRIPT",
+          "path": "NEBULA/1.0.0/package/scripts/alerts/alert_storaged_process.py",
+          "parameters": []
+        }
+      },
+      {
+        "name": "nebula_cluster_health",
+        "label": "Nebula Cluster Health",
+        "description": "This alert is triggered if the Nebula cluster health is poor based on the availability of Meta nodes.",
+        "interval": 5,
+        "scope": "SERVICE",
+        "enabled": true,
+        "source": {
+          "type": "SCRIPT",
+          "path": "NEBULA/1.0.0/package/scripts/alerts/alert_cluster_health.py",
+          "parameters": []
+        }
+      }
+    ],
+    "NEBULA_GRAPHD": [
+      {
+        "name": "nebula_graphd_query_latency",
+        "label": "Nebula Graphd Query Latency",
+        "description": "This alert is triggered if the Nebula Graphd query latency is high.",
+        "interval": 5,
+        "scope": "ANY",
+        "enabled": true,
+        "source": {
+          "type": "METRIC",
+          "uri": {
+            "http": "{{graphd_http_port}}/stats",
+            "https": "{{graphd_https_port}}/stats",
+            "https_property": "{{cluster-env/security_enabled}}",
+            "https_property_value": "true",
+            "connection_timeout": 5.0
+          },
+          "reporting": {
+            "ok": {
+              "text": "Query latency is {0}us"
+            },
+            "warning": {
+              "text": "Query latency is {0}us",
+              "value": 100000
+            },
+            "critical": {
+              "text": "Query latency is {0}us",
+              "value": 500000
+            }
+          },
+          "jmx": {
+            "property_list": [
+              "nebula.graphd.query_latency_us"
+            ],
+            "value": "{0}"
+          }
+        }
+      },
+      {
+        "name": "nebula_graphd_memory_usage",
+        "label": "Nebula Graphd Memory Usage",
+        "description": "This alert is triggered if the Nebula Graphd memory usage is high.",
+        "interval": 5,
+        "scope": "ANY",
+        "enabled": true,
+        "source": {
+          "type": "METRIC",
+          "uri": {
+            "http": "{{graphd_http_port}}/stats",
+            "https": "{{graphd_https_port}}/stats",
+            "https_property": "{{cluster-env/security_enabled}}",
+            "https_property_value": "true",
+            "connection_timeout": 5.0
+          },
+          "reporting": {
+            "ok": {
+              "text": "Memory usage is {0}%"
+            },
+            "warning": {
+              "text": "Memory usage is {0}%",
+              "value": 80.0
+            },
+            "critical": {
+              "text": "Memory usage is {0}%",
+              "value": 90.0
+            }
+          },
+          "jmx": {
+            "property_list": [
+              "nebula.graphd.memory_usage_percent"
+            ],
+            "value": "{0}"
+          }
+        }
+      },
+      {
+        "name": "nebula_graphd_active_sessions",
+        "label": "Nebula Graphd Active Sessions",
+        "description": "This alert is triggered if the number of active sessions is too high.",
+        "interval": 5,
+        "scope": "ANY",
+        "enabled": true,
+        "source": {
+          "type": "METRIC",
+          "uri": {
+            "http": "{{graphd_http_port}}/stats",
+            "https": "{{graphd_https_port}}/stats",
+            "https_property": "{{cluster-env/security_enabled}}",
+            "https_property_value": "true",
+            "connection_timeout": 5.0
+          },
+          "reporting": {
+            "ok": {
+              "text": "Active sessions: {0}"
+            },
+            "warning": {
+              "text": "Active sessions: {0}",
+              "value": 800
+            },
+            "critical": {
+              "text": "Active sessions: {0}",
+              "value": 1000
+            }
+          },
+          "jmx": {
+            "property_list": [
+              "nebula.graphd.num_active_sessions"
+            ],
+            "value": "{0}"
+          }
+        }
+      }
+    ],
+    "NEBULA_METAD": [
+      {
+        "name": "nebula_metad_heartbeat_latency",
+        "label": "Nebula Metad Heartbeat Latency",
+        "description": "This alert is triggered if the Nebula Metad heartbeat latency is high.",
+        "interval": 5,
+        "scope": "ANY",
+        "enabled": true,
+        "source": {
+          "type": "METRIC",
+          "uri": {
+            "http": "{{metad_http_port}}/stats",
+            "https": "{{metad_https_port}}/stats",
+            "https_property": "{{cluster-env/security_enabled}}",
+            "https_property_value": "true",
+            "connection_timeout": 5.0
+          },
+          "reporting": {
+            "ok": {
+              "text": "Heartbeat latency is {0}us"
+            },
+            "warning": {
+              "text": "Heartbeat latency is {0}us",
+              "value": 50000
+            },
+            "critical": {
+              "text": "Heartbeat latency is {0}us",
+              "value": 100000
+            }
+          },
+          "jmx": {
+            "property_list": [
+              "nebula.metad.heartbeat_latency_us"
+            ],
+            "value": "{0}"
+          }
+        }
+      },
+      {
+        "name": "nebula_metad_leader_status",
+        "label": "Nebula Metad Leader Status",
+        "description": "This alert is triggered if there is no leader in the Metad cluster.",
+        "interval": 3,
+        "scope": "SERVICE",
+        "enabled": true,
+        "source": {
+          "type": "SCRIPT",
+          "path": "NEBULA/1.0.0/package/scripts/alerts/alert_metad_leader.py",
+          "parameters": []
+        }
+      }
+    ],
+    "NEBULA_STORAGED": [
+      {
+        "name": "nebula_storaged_disk_usage",
+        "label": "Nebula Storaged Disk Usage",
+        "description": "This alert is triggered if the Nebula Storaged disk usage is high.",
+        "interval": 5,
+        "scope": "ANY",
+        "enabled": true,
+        "source": {
+          "type": "METRIC",
+          "uri": {
+            "http": "{{storaged_http_port}}/stats",
+            "https": "{{storaged_https_port}}/stats",
+            "https_property": "{{cluster-env/security_enabled}}",
+            "https_property_value": "true",
+            "connection_timeout": 5.0
+          },
+          "reporting": {
+            "ok": {
+              "text": "Disk usage is {0}%"
+            },
+            "warning": {
+              "text": "Disk usage is {0}%",
+              "value": 80.0
+            },
+            "critical": {
+              "text": "Disk usage is {0}%",
+              "value": 90.0
+            }
+          },
+          "jmx": {
+            "property_list": [
+              "nebula.storaged.disk_usage_percent"
+            ],
+            "value": "{0}"
+          }
+        }
+      },
+      {
+        "name": "nebula_storaged_operation_latency",
+        "label": "Nebula Storaged Operation Latency",
+        "description": "This alert is triggered if the Nebula Storaged operation latency is high.",
+        "interval": 5,
+        "scope": "ANY",
+        "enabled": true,
+        "source": {
+          "type": "METRIC",
+          "uri": {
+            "http": "{{storaged_http_port}}/stats",
+            "https": "{{storaged_https_port}}/stats",
+            "https_property": "{{cluster-env/security_enabled}}",
+            "https_property_value": "true",
+            "connection_timeout": 5.0
+          },
+          "reporting": {
+            "ok": {
+              "text": "Get operation latency is {0}us"
+            },
+            "warning": {
+              "text": "Get operation latency is {0}us",
+              "value": 10000
+            },
+            "critical": {
+              "text": "Get operation latency is {0}us",
+              "value": 50000
+            }
+          },
+          "jmx": {
+            "property_list": [
+              "nebula.storaged.get_latency_us"
+            ],
+            "value": "{0}"
+          }
+        }
+      }
+    ]
+  }
+}

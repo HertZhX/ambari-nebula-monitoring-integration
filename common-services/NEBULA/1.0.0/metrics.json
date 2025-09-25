@@ -1,0 +1,172 @@
+{
+  "NEBULA": {
+    "Component": [
+      {
+        "type": "ganglia",
+        "metrics": {
+          "default": {
+            "metrics/nebula/graphd/": {
+              "metric": "nebula.graphd.",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/metad/": {
+              "metric": "nebula.metad.",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/storaged/": {
+              "metric": "nebula.storaged.",
+              "pointInTime": true,
+              "temporal": true
+            }
+          }
+        }
+      }
+    ],
+    "HostComponent": [
+      {
+        "type": "ganglia",
+        "metrics": {
+          "default": {
+            "metrics/nebula/graphd/num_active_sessions": {
+              "metric": "nebula.graphd.num_active_sessions",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/graphd/query_latency_us": {
+              "metric": "nebula.graphd.query_latency_us",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/graphd/qps": {
+              "metric": "nebula.graphd.qps",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/graphd/memory_usage_bytes": {
+              "metric": "nebula.graphd.memory_usage_bytes",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/graphd/cpu_usage_percent": {
+              "metric": "nebula.graphd.cpu_usage_percent",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/graphd/slow_query_count": {
+              "metric": "nebula.graphd.slow_query_count",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/graphd/error_query_count": {
+              "metric": "nebula.graphd.error_query_count",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/metad/num_spaces": {
+              "metric": "nebula.metad.num_spaces",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/metad/num_tags": {
+              "metric": "nebula.metad.num_tags",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/metad/num_edges": {
+              "metric": "nebula.metad.num_edges",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/metad/heartbeat_latency_us": {
+              "metric": "nebula.metad.heartbeat_latency_us",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/metad/is_leader": {
+              "metric": "nebula.metad.is_leader",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/metad/memory_usage_bytes": {
+              "metric": "nebula.metad.memory_usage_bytes",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/metad/cpu_usage_percent": {
+              "metric": "nebula.metad.cpu_usage_percent",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/storaged/disk_usage_bytes": {
+              "metric": "nebula.storaged.disk_usage_bytes",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/storaged/num_vertices": {
+              "metric": "nebula.storaged.num_vertices",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/storaged/num_edges_stored": {
+              "metric": "nebula.storaged.num_edges_stored",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/storaged/get_latency_us": {
+              "metric": "nebula.storaged.get_latency_us",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/storaged/put_latency_us": {
+              "metric": "nebula.storaged.put_latency_us",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/storaged/memory_usage_bytes": {
+              "metric": "nebula.storaged.memory_usage_bytes",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/storaged/cpu_usage_percent": {
+              "metric": "nebula.storaged.cpu_usage_percent",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/storaged/rocksdb_block_cache_hit_rate": {
+              "metric": "nebula.storaged.rocksdb_block_cache_hit_rate",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/storaged/rocksdb_compaction_pending": {
+              "metric": "nebula.storaged.rocksdb_compaction_pending",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/cluster/total_vertices": {
+              "metric": "nebula.cluster.total_vertices",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/cluster/total_edges": {
+              "metric": "nebula.cluster.total_edges",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/cluster/healthy_hosts": {
+              "metric": "nebula.cluster.healthy_hosts",
+              "pointInTime": true,
+              "temporal": true
+            },
+            "metrics/nebula/cluster/total_hosts": {
+              "metric": "nebula.cluster.total_hosts",
+              "pointInTime": true,
+              "temporal": true
+            }
+          }
+        }
+      }
+    ]
+  }
+}

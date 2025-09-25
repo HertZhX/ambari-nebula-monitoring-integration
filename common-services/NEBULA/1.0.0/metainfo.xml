@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<metainfo>
+  <schemaVersion>2.0</schemaVersion>
+  <services>
+    <service>
+      <name>NEBULA</name>
+      <displayName>Nebula Graph</displayName>
+      <comment>Nebula Graph is a high performance distributed Graph Database</comment>
+      <version>3.0.0</version>
+      
+      <components>
+        <!-- Nebula Graphd组件 - 查询引擎 -->
+        <component>
+          <name>NEBULA_GRAPHD</name>
+          <displayName>Nebula Graphd</displayName>
+          <category>MASTER</category>
+          <cardinality>1+</cardinality>
+          <versionAdvertised>true</versionAdvertised>
+          <dependencies>
+            <dependency>
+              <name>NEBULA/NEBULA_METAD</name>
+              <scope>cluster</scope>
+              <auto-deploy>
+                <enabled>false</enabled>
+              </auto-deploy>
+            </dependency>
+          </dependencies>
+          <commandScript>
+            <script>scripts/graphd.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>1200</timeout>
+          </commandScript>
+          <logs>
+            <log>
+              <logId>nebula_graphd</logId>
+              <primary>true</primary>
+            </log>
+          </logs>
+        </component>
+
+        <!-- Nebula Metad组件 - 元数据管理 -->
+        <component>
+          <name>NEBULA_METAD</name>
+          <displayName>Nebula Metad</displayName>
+          <category>MASTER</category>
+          <cardinality>1+</cardinality>
+          <versionAdvertised>true</versionAdvertised>
+          <commandScript>
+            <script>scripts/metad.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>1200</timeout>
+          </commandScript>
+          <logs>
+            <log>
+              <logId>nebula_metad</logId>
+              <primary>true</primary>
+            </log>
+          </logs>
+        </component>
+
+        <!-- Nebula Storaged组件 - 存储引擎 -->
+        <component>
+          <name>NEBULA_STORAGED</name>
+          <displayName>Nebula Storaged</displayName>
+          <category>SLAVE</category>
+          <cardinality>1+</cardinality>
+          <versionAdvertised>true</versionAdvertised>
+          <dependencies>
+            <dependency>
+              <name>NEBULA/NEBULA_METAD</name>
+              <scope>cluster</scope>
+              <auto-deploy>
+                <enabled>false</enabled>
+              </auto-deploy>
+            </dependency>
+          </dependencies>
+          <commandScript>
+            <script>scripts/storaged.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>1200</timeout>
+          </commandScript>
+          <logs>
+            <log>
+              <logId>nebula_storaged</logId>
+              <primary>true</primary>
+            </log>
+          </logs>
+        </component>
+
+        <!-- Nebula Console组件 - 客户端工具（可选） -->
+        <component>
+          <name>NEBULA_CONSOLE</name>
+          <displayName>Nebula Console</displayName>
+          <category>CLIENT</category>
+          <cardinality>0+</cardinality>
+          <versionAdvertised>false</versionAdvertised>
+          <commandScript>
+            <script>scripts/console.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>300</timeout>
+          </commandScript>
+        </component>
+      </components>
+
+      <osSpecifics>
+        <osSpecific>
+          <osFamily>any</osFamily>
+          <packages>
+            <package>
+              <name>nebula-graph</name>
+            </package>
+          </packages>
+        </osSpecific>
+      </osSpecifics>
+
+      <commandScript>
+        <script>scripts/service_check.py</script>
+        <scriptType>PYTHON</scriptType>
+        <timeout>300</timeout>
+      </commandScript>
+
+      <requiredServices>
+      </requiredServices>
+
+      <configuration-dependencies>
+        <config-type>nebula-env</config-type>
+        <config-type>nebula-graphd-site</config-type>
+        <config-type>nebula-metad-site</config-type>
+        <config-type>nebula-storaged-site</config-type>
+        <config-type>nebula-log4j</config-type>
+      </configuration-dependencies>
+
+      <restartRequiredAfterChange>true</restartRequiredAfterChange>
+
+      <widgetsDescriptor>
+        <widget>
+          <type>GRAPH</type>
+          <units>%</units>
+          <scope>SERVICE</scope>
+          <threshold>
+            <ok>0-60</ok>
+            <warning>60-80</warning>
+            <critical>80-100</critical>
+          </threshold>
+        </widget>
+        <widget>
+          <type>NUMBER</type>
+          <units>QPS</units>
+          <scope>SERVICE</scope>
+        </widget>
+        <widget>
+          <type>GAUGE</type>
+          <units>ms</units>
+          <scope>SERVICE</scope>
+          <threshold>
+            <ok>0-50</ok>
+            <warning>50-100</warning>
+            <critical>100-1000</critical>
+          </threshold>
+        </widget>
+      </widgetsDescriptor>
+
+      <metricsFileName>metrics.json</metricsFileName>
+      <alertsFileName>alerts.json</alertsFileName>
+
+    </service>
+  </services>
+</metainfo>

@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<configuration>
+  
+  <property>
+    <name>content</name>
+    <display-name>nebula log4j content</display-name>
+    <description>Nebula Log4j配置内容</description>
+    <value>
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Nebula Graph Log4j配置
+# 设置日志级别和输出格式
+
+# 根logger配置
+log4j.rootLogger=INFO, console, file
+
+# 控制台输出配置
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.Target=System.out
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+
+# 文件输出配置
+log4j.appender.file=org.apache.log4j.RollingFileAppender
+log4j.appender.file.File={{nebula_log_dir}}/nebula.log
+log4j.appender.file.MaxFileSize=100MB
+log4j.appender.file.MaxBackupIndex=10
+log4j.appender.file.layout=org.apache.log4j.PatternLayout
+log4j.appender.file.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+
+# 错误日志单独输出
+log4j.appender.errorfile=org.apache.log4j.RollingFileAppender
+log4j.appender.errorfile.File={{nebula_log_dir}}/nebula-error.log
+log4j.appender.errorfile.MaxFileSize=100MB
+log4j.appender.errorfile.MaxBackupIndex=5
+log4j.appender.errorfile.Threshold=ERROR
+log4j.appender.errorfile.layout=org.apache.log4j.PatternLayout
+log4j.appender.errorfile.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+
+# Graphd特定日志配置
+log4j.logger.graphd=INFO, graphdfile
+log4j.additivity.graphd=false
+
+log4j.appender.graphdfile=org.apache.log4j.RollingFileAppender
+log4j.appender.graphdfile.File={{nebula_log_dir}}/graphd.log
+log4j.appender.graphdfile.MaxFileSize=100MB
+log4j.appender.graphdfile.MaxBackupIndex=10
+log4j.appender.graphdfile.layout=org.apache.log4j.PatternLayout
+log4j.appender.graphdfile.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+
+# Metad特定日志配置
+log4j.logger.metad=INFO, metadfile
+log4j.additivity.metad=false
+
+log4j.appender.metadfile=org.apache.log4j.RollingFileAppender
+log4j.appender.metadfile.File={{nebula_log_dir}}/metad.log
+log4j.appender.metadfile.MaxFileSize=100MB
+log4j.appender.metadfile.MaxBackupIndex=10
+log4j.appender.metadfile.layout=org.apache.log4j.PatternLayout
+log4j.appender.metadfile.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+
+# Storaged特定日志配置
+log4j.logger.storaged=INFO, storagedfile
+log4j.additivity.storaged=false
+
+log4j.appender.storagedfile=org.apache.log4j.RollingFileAppender
+log4j.appender.storagedfile.File={{nebula_log_dir}}/storaged.log
+log4j.appender.storagedfile.MaxFileSize=100MB
+log4j.appender.storagedfile.MaxBackupIndex=10
+log4j.appender.storagedfile.layout=org.apache.log4j.PatternLayout
+log4j.appender.storagedfile.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+
+# 性能日志配置
+log4j.logger.performance=INFO, perffile
+log4j.additivity.performance=false
+
+log4j.appender.perffile=org.apache.log4j.RollingFileAppender
+log4j.appender.perffile.File={{nebula_log_dir}}/performance.log
+log4j.appender.perffile.MaxFileSize=100MB
+log4j.appender.perffile.MaxBackupIndex=5
+log4j.appender.perffile.layout=org.apache.log4j.PatternLayout
+log4j.appender.perffile.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+
+# 审计日志配置
+log4j.logger.audit=INFO, auditfile
+log4j.additivity.audit=false
+
+log4j.appender.auditfile=org.apache.log4j.RollingFileAppender
+log4j.appender.auditfile.File={{nebula_log_dir}}/audit.log
+log4j.appender.auditfile.MaxFileSize=100MB
+log4j.appender.auditfile.MaxBackupIndex=10
+log4j.appender.auditfile.layout=org.apache.log4j.PatternLayout
+log4j.appender.auditfile.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+
+# 减少第三方库的日志噪音
+log4j.logger.org.apache.http=WARN
+log4j.logger.org.apache.commons=WARN
+log4j.logger.org.eclipse.jetty=WARN
+    </value>
+    <value-attributes>
+      <type>content</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+</configuration>

@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<configuration supports_adding_forbidden="true">
+  
+  <property>
+    <name>nebula_user</name>
+    <display-name>Nebula User</display-name>
+    <value>nebula</value>
+    <property-type>USER</property-type>
+    <description>运行Nebula服务的系统用户</description>
+    <value-attributes>
+      <type>user</type>
+      <overridable>false</overridable>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <property>
+    <name>nebula_group</name>
+    <display-name>Nebula Group</display-name>
+    <value>nebula</value>
+    <property-type>GROUP</property-type>
+    <description>Nebula服务的系统用户组</description>
+    <value-attributes>
+      <type>user</type>
+      <overridable>false</overridable>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <property>
+    <name>nebula_install_dir</name>
+    <display-name>Nebula Install Directory</display-name>
+    <value>/usr/local/nebula</value>
+    <description>Nebula Graph安装目录</description>
+    <value-attributes>
+      <type>directory</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>nebula_data_dir</name>
+    <display-name>Nebula Data Directory</display-name>
+    <value>/var/lib/nebula</value>
+    <description>Nebula数据存储根目录</description>
+    <value-attributes>
+      <type>directory</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>nebula_log_dir</name>
+    <display-name>Nebula Log Directory</display-name>
+    <value>/var/log/nebula</value>
+    <description>Nebula日志文件目录</description>
+    <value-attributes>
+      <type>directory</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>nebula_pid_dir</name>
+    <display-name>Nebula PID Directory</display-name>
+    <value>/var/run/nebula</value>
+    <description>Nebula进程PID文件目录</description>
+    <value-attributes>
+      <type>directory</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property require-input="true">
+    <name>nebula_cluster_name</name>
+    <display-name>Nebula Cluster Name</display-name>
+    <value>nebula_cluster</value>
+    <description>Nebula Graph集群名称</description>
+    <value-attributes>
+      <empty-value-valid>false</empty-value-valid>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+  <property>
+    <name>content</name>
+    <display-name>nebula-env template</display-name>
+    <description>Nebula环境变量脚本模板</description>
+    <value>
+#!/bin/bash
+
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Nebula Graph Environment Variables
+
+# Nebula安装目录
+export NEBULA_HOME={{nebula_install_dir}}
+
+# Nebula数据目录
+export NEBULA_DATA_DIR={{nebula_data_dir}}
+
+# Nebula日志目录
+export NEBULA_LOG_DIR={{nebula_log_dir}}
+
+# Nebula PID目录
+export NEBULA_PID_DIR={{nebula_pid_dir}}
+
+# Nebula用户
+export NEBULA_USER={{nebula_user}}
+
+# Nebula用户组
+export NEBULA_GROUP={{nebula_group}}
+
+# 集群名称
+export NEBULA_CLUSTER_NAME={{nebula_cluster_name}}
+
+# Java相关环境变量
+export JAVA_HOME={{java64_home}}
+export JAVA_OPTS="-Xmx2g -Xms2g"
+
+# 系统环境变量
+export PATH=$NEBULA_HOME/bin:$PATH
+export LD_LIBRARY_PATH=$NEBULA_HOME/lib:$LD_LIBRARY_PATH
+
+# 创建必要的目录
+umask 022
+
+if [ ! -d "$NEBULA_DATA_DIR" ]; then
+    mkdir -p $NEBULA_DATA_DIR
+    chown $NEBULA_USER:$NEBULA_GROUP $NEBULA_DATA_DIR
+    chmod 755 $NEBULA_DATA_DIR
+fi
+
+if [ ! -d "$NEBULA_LOG_DIR" ]; then
+    mkdir -p $NEBULA_LOG_DIR
+    chown $NEBULA_USER:$NEBULA_GROUP $NEBULA_LOG_DIR
+    chmod 755 $NEBULA_LOG_DIR
+fi
+
+if [ ! -d "$NEBULA_PID_DIR" ]; then
+    mkdir -p $NEBULA_PID_DIR
+    chown $NEBULA_USER:$NEBULA_GROUP $NEBULA_PID_DIR
+    chmod 755 $NEBULA_PID_DIR
+fi
+    </value>
+    <value-attributes>
+      <type>content</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
+</configuration>
