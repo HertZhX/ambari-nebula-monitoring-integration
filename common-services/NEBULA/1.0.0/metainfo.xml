@@ -136,6 +136,7 @@
       </commandScript>
 
       <requiredServices>
+        <service>ZOOKEEPER</service>
       </requiredServices>
 
       <configuration-dependencies>
