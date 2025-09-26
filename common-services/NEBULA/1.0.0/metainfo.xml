@@ -82,8 +82,8 @@
         <component>
           <name>NEBULA_STORAGED</name>
           <displayName>Nebula Storaged</displayName>
-          <category>SLAVE</category>
-          <cardinality>3+</cardinality>
+          <category>MASTER</category>
+          <cardinality>1+</cardinality>
           <versionAdvertised>true</versionAdvertised>
           <auto-deploy>
             <enabled>true</enabled>
