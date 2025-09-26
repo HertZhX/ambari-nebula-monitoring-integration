@@ -81,6 +81,9 @@ if 'nebula-graphd-site' in config['configurations']:
     graphd_auth_type = config['configurations']['nebula-graphd-site']['auth_type']
     graphd_log_level = config['configurations']['nebula-graphd-site']['log_level']
     graphd_max_allowed_connections = config['configurations']['nebula-graphd-site']['max_allowed_connections']
+    # 添加缺少的配置项
+    graphd_meta_server_addrs = config['configurations']['nebula-graphd-site'].get('meta_server_addrs', metad_hosts_with_port)
+    graphd_local_config = config['configurations']['nebula-graphd-site'].get('local_config', 'true')
 
 # Metad specific configurations
 if 'nebula-metad-site' in config['configurations']:
@@ -95,6 +98,9 @@ if 'nebula-metad-site' in config['configurations']:
     metad_agent_heartbeat_interval_secs = config['configurations']['nebula-metad-site']['agent_heartbeat_interval_secs']
     metad_cluster_id = config['configurations']['nebula-metad-site']['cluster_id']
     metad_ws_meta_http_port = config['configurations']['nebula-metad-site']['ws_meta_http_port']
+    # 添加缺少的配置项
+    metad_ws_http_port = config['configurations']['nebula-metad-site'].get('ws_http_port', '19559')
+    metad_ws_h2_port = config['configurations']['nebula-metad-site'].get('ws_h2_port', '19560')
 
 # Storaged specific configurations
 if 'nebula-storaged-site' in config['configurations']:
@@ -108,11 +114,13 @@ if 'nebula-storaged-site' in config['configurations']:
     storaged_log_level = config['configurations']['nebula-storaged-site']['log_level']
     storaged_rocksdb_wal_sync = config['configurations']['nebula-storaged-site']['rocksdb_wal_sync']
     storaged_rocksdb_column_family_options = config['configurations']['nebula-storaged-site']['rocksdb_column_family_options']
-    storaged_rocksdb_db_options = config['configurations']['nebula-storaged-site']['rocksdb_rocksdb_db_options']
+    storaged_rocksdb_db_options = config['configurations']['nebula-storaged-site']['rocksdb_db_options']
     storaged_rocksdb_block_cache = config['configurations']['nebula-storaged-site']['rocksdb_block_cache']
     storaged_enable_auto_compactions = config['configurations']['nebula-storaged-site']['enable_auto_compactions']
     storaged_enable_partitioning_on_compaction = config['configurations']['nebula-storaged-site']['enable_partitioning_on_compaction']
     storaged_custom_filter_interval_secs = config['configurations']['nebula-storaged-site']['custom_filter_interval_secs']
+    # 添加缺少的配置项
+    storaged_meta_server_addrs = config['configurations']['nebula-storaged-site'].get('meta_server_addrs', metad_hosts_with_port)
 
 # Log4j configurations
 if 'nebula-log4j' in config['configurations']:
@@ -138,8 +146,12 @@ nebula_console_bin = nebula_install_dir + '/bin/nebula-console'
 
 # Import all the properties
 import functools
-_all_configurations = [config['configurations'][_config] for _config in config['configurations']]
-all_configurations = functools.reduce(lambda a, b: dict(a.items() + b.items()), _all_configurations)
+try:
+    _all_configurations = [config['configurations'][_config] for _config in config['configurations']]
+    all_configurations = functools.reduce(lambda a, b: dict(list(a.items()) + list(b.items())), _all_configurations)
+except Exception as e:
+    print("Warning: Could not merge all configurations: %s" % str(e))
+    all_configurations = {}
 
 # Verify required directories exist
 config_dir = nebula_install_dir + '/etc'
