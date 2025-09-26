@@ -146,6 +146,17 @@ sudo ambari-server status
 sudo ambari-server list-mpacks
 ```
 
+```bash
+# 查看可用的堆栈版本
+ls -la /var/lib/ambari-server/resources/stacks/
+
+# 如果使用特定堆栈版本，可能需要复制到对应位置
+# 例如：HDP 3.1
+sudo mkdir -p /var/lib/ambari-server/resources/stacks/HDP/3.1/services/NEBULA
+sudo cp -r /var/lib/ambari-server/resources/common-services/NEBULA/1.0.0/* /var/lib/ambari-server/resources/stacks/HDP/3.1/services/NEBULA/
+```
+
+
 登录Ambari Web界面，在"Add Service"页面应该能看到"Nebula Graph"选项。
 
 ## 服务配置

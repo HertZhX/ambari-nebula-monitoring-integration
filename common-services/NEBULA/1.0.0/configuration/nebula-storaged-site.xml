@@ -60,7 +60,7 @@
   <property>
     <name>data_path</name>
     <display-name>Storaged Data Path</display-name>
-    <value>{{nebula_data_dir}}/storage</value>
+    <value>/var/lib/nebula/storage</value>
     <description>Storaged数据存储路径</description>
     <value-attributes>
       <type>directory</type>
@@ -82,7 +82,7 @@
   <property require-input="true">
     <name>meta_server_addrs</name>
     <display-name>Metad Server Addresses</display-name>
-    <value>{{metad_hosts_with_port}}</value>
+    <value>localhost:9559</value>
     <description>Metad服务器地址列表，格式: host1:port,host2:port</description>
     <value-attributes>
       <empty-value-valid>false</empty-value-valid>

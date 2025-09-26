@@ -32,6 +32,10 @@
           <category>MASTER</category>
           <cardinality>1+</cardinality>
           <versionAdvertised>true</versionAdvertised>
+          <auto-deploy>
+            <enabled>true</enabled>
+            <co-locate>NEBULA/NEBULA_CONSOLE</co-locate>
+          </auto-deploy>
           <dependencies>
             <dependency>
               <name>NEBULA/NEBULA_METAD</name>
@@ -79,8 +83,12 @@
           <name>NEBULA_STORAGED</name>
           <displayName>Nebula Storaged</displayName>
           <category>SLAVE</category>
-          <cardinality>1+</cardinality>
+          <cardinality>3+</cardinality>
           <versionAdvertised>true</versionAdvertised>
+          <auto-deploy>
+            <enabled>true</enabled>
+            <co-locate>NEBULA/NEBULA_CONSOLE</co-locate>
+          </auto-deploy>
           <dependencies>
             <dependency>
               <name>NEBULA/NEBULA_METAD</name>
@@ -179,6 +187,10 @@
 
       <metricsFileName>metrics.json</metricsFileName>
       <alertsFileName>alerts.json</alertsFileName>
+      
+      <serviceAdvisor>
+        <script>scripts/service_advisor.py</script>
+      </serviceAdvisor>
 
     </service>
   </services>

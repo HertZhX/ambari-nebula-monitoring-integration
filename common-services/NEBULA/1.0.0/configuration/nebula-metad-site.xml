@@ -60,7 +60,7 @@
   <property>
     <name>data_path</name>
     <display-name>Metad Data Path</display-name>
-    <value>{{nebula_data_dir}}/meta</value>
+    <value>/var/lib/nebula/meta</value>
     <description>Metad数据存储路径</description>
     <value-attributes>
       <type>directory</type>
