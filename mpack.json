@@ -6,7 +6,7 @@
   "display-name": "Nebula Graph Ambari Integration",
   "author": "Nebula Graph Community",
   "license": "Apache License 2.0",
-  "prereqs": {
+  "prerequisites": {
     "min-ambari-version": "2.6.0",
     "max-ambari-version": "2.8.0"
   },
@@ -14,7 +14,7 @@
     {
       "name": "nebula-ambari-service",
       "type": "service-definitions",
-      "source-dir": "common-services"
+      "source_dir": "common-services"
     }
   ]
 }
