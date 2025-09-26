@@ -24,9 +24,7 @@ Nebula Graph Service Advisor for Ambari
 
 import os
 import traceback
-import re
-import socket
-from math import ceil, floor
+
 
 class NebulaServiceAdvisor(object):
     """
@@ -49,15 +47,6 @@ class NebulaServiceAdvisor(object):
             
             # 基础配置推荐
             self._recommend_nebula_configurations(configurations, cluster_data, hosts, services)
-            
-            # 端口配置推荐
-            self._recommend_port_configurations(configurations)
-            
-            # 性能配置推荐
-            self._recommend_performance_configurations(configurations, hosts)
-            
-            # 路径配置推荐
-            self._recommend_path_configurations(configurations)
             
         except Exception as e:
             print("Error in get_service_configuration_recommendations: %s" % str(e))
@@ -101,99 +90,6 @@ class NebulaServiceAdvisor(object):
         # 推荐基于集群拓扑的配置
         self._recommend_cluster_topology_configs(configurations, cluster_data, hosts, services)
     
-    def _recommend_port_configurations(self, configurations):
-        """
-        推荐端口配置
-        """
-        # Metad端口配置
-        metad_site = self._get_configuration(configurations, 'nebula-metad-site', {})
-        if 'port' not in metad_site:
-            metad_site['port'] = '9559'
-        if 'ws_http_port' not in metad_site:
-            metad_site['ws_http_port'] = '19559'
-        if 'ws_h2_port' not in metad_site:
-            metad_site['ws_h2_port'] = '19560'
-        self._put_configuration(configurations, 'nebula-metad-site', metad_site)
-        
-        # Graphd端口配置
-        graphd_site = self._get_configuration(configurations, 'nebula-graphd-site', {})
-        if 'port' not in graphd_site:
-            graphd_site['port'] = '9669'
-        if 'ws_http_port' not in graphd_site:
-            graphd_site['ws_http_port'] = '19669'
-        if 'ws_h2_port' not in graphd_site:
-            graphd_site['ws_h2_port'] = '19670'
-        self._put_configuration(configurations, 'nebula-graphd-site', graphd_site)
-        
-        # Storaged端口配置
-        storaged_site = self._get_configuration(configurations, 'nebula-storaged-site', {})
-        if 'port' not in storaged_site:
-            storaged_site['port'] = '9779'
-        if 'ws_http_port' not in storaged_site:
-            storaged_site['ws_http_port'] = '19779'
-        if 'ws_h2_port' not in storaged_site:
-            storaged_site['ws_h2_port'] = '19780'
-        if 'heartbeat_interval_secs' not in storaged_site:
-            storaged_site['heartbeat_interval_secs'] = '10'
-        self._put_configuration(configurations, 'nebula-storaged-site', storaged_site)
-    
-    def _recommend_performance_configurations(self, configurations, hosts):
-        """
-        根据主机资源推荐性能配置
-        """
-        if not hosts:
-            return
-            
-        # 获取典型主机的资源信息
-        host_info = hosts[0] if hosts else {}
-        memory_mb = int(host_info.get('memory', 8192))  # 默认8GB
-        cpu_cores = int(host_info.get('cpu', 4))  # 默认4核
-        
-        # Metad性能配置
-        metad_site = self._get_configuration(configurations, 'nebula-metad-site', {})
-        if 'num_io_threads' not in metad_site:
-            metad_site['num_io_threads'] = str(min(16, max(4, cpu_cores)))
-        if 'num_worker_threads' not in metad_site:
-            metad_site['num_worker_threads'] = str(min(32, max(8, cpu_cores * 2)))
-        self._put_configuration(configurations, 'nebula-metad-site', metad_site)
-        
-        # Graphd性能配置
-        graphd_site = self._get_configuration(configurations, 'nebula-graphd-site', {})
-        if 'num_io_threads' not in graphd_site:
-            graphd_site['num_io_threads'] = str(min(16, max(4, cpu_cores)))
-        if 'num_worker_threads' not in graphd_site:
-            graphd_site['num_worker_threads'] = str(min(32, max(8, cpu_cores * 2)))
-        if 'max_allowed_connections' not in graphd_site:
-            graphd_site['max_allowed_connections'] = str(min(1000, max(100, memory_mb // 10)))
-        self._put_configuration(configurations, 'nebula-graphd-site', graphd_site)
-        
-        # Storaged性能配置
-        storaged_site = self._get_configuration(configurations, 'nebula-storaged-site', {})
-        if 'num_io_threads' not in storaged_site:
-            storaged_site['num_io_threads'] = str(min(16, max(4, cpu_cores)))
-        if 'num_worker_threads' not in storaged_site:
-            storaged_site['num_worker_threads'] = str(min(32, max(8, cpu_cores * 2)))
-        self._put_configuration(configurations, 'nebula-storaged-site', storaged_site)
-    
-    def _recommend_path_configurations(self, configurations):
-        """
-        推荐路径配置
-        """
-        nebula_env = self._get_configuration(configurations, 'nebula-env', {})
-        nebula_data_dir = nebula_env.get('nebula_data_dir', '/var/lib/nebula')
-        
-        # Metad路径配置
-        metad_site = self._get_configuration(configurations, 'nebula-metad-site', {})
-        if 'data_path' not in metad_site:
-            metad_site['data_path'] = nebula_data_dir + '/meta'
-        self._put_configuration(configurations, 'nebula-metad-site', metad_site)
-        
-        # Storaged路径配置
-        storaged_site = self._get_configuration(configurations, 'nebula-storaged-site', {})
-        if 'data_path' not in storaged_site:
-            storaged_site['data_path'] = nebula_data_dir + '/storage'
-        self._put_configuration(configurations, 'nebula-storaged-site', storaged_site)
-    
     def _recommend_cluster_topology_configs(self, configurations, cluster_data, hosts, services):
         """
         根据集群拓扑推荐配置
@@ -210,24 +106,15 @@ class NebulaServiceAdvisor(object):
                 
                 # 更新Graphd配置
                 graphd_site = self._get_configuration(configurations, 'nebula-graphd-site', {})
-                graphd_site['meta_server_addrs'] = metad_server_list
+                if 'meta_server_addrs' not in graphd_site or not graphd_site['meta_server_addrs']:
+                    graphd_site['meta_server_addrs'] = metad_server_list
                 self._put_configuration(configurations, 'nebula-graphd-site', graphd_site)
                 
-                # 更新Storaged配置
+                # 更新Storaged配置  
                 storaged_site = self._get_configuration(configurations, 'nebula-storaged-site', {})
-                storaged_site['meta_server_addrs'] = metad_server_list
+                if 'meta_server_addrs' not in storaged_site or not storaged_site['meta_server_addrs']:
+                    storaged_site['meta_server_addrs'] = metad_server_list
                 self._put_configuration(configurations, 'nebula-storaged-site', storaged_site)
-            
-            # 推荐副本因子配置
-            storaged_hosts = self.component_hosts_map.get('NEBULA_STORAGED', [])
-            if len(storaged_hosts) >= 3:
-                # 根据Storaged节点数量推荐副本因子
-                recommended_replica_factor = min(3, len(storaged_hosts))
-                
-                metad_site = self._get_configuration(configurations, 'nebula-metad-site', {})
-                if 'default_replica_factor' not in metad_site:
-                    metad_site['default_replica_factor'] = str(recommended_replica_factor)
-                self._put_configuration(configurations, 'nebula-metad-site', metad_site)
                 
         except Exception as e:
             print("Error in _recommend_cluster_topology_configs: %s" % str(e))
@@ -260,71 +147,7 @@ class NebulaServiceAdvisor(object):
         """
         获取组件布局验证规则
         """
-        validations = []
-        
-        # 获取组件分布情况
-        component_hosts = self._get_component_host_mapping(services)
-        
-        # 验证METAD组件
-        metad_hosts = component_hosts.get('NEBULA_METAD', [])
-        if len(metad_hosts) == 0:
-            validations.append({
-                "type": "configuration",
-                "level": "ERROR",
-                "message": "至少需要部署一个Metad组件",
-                "config-type": "nebula-metad-site",
-                "config-name": "port"
-            })
-        elif len(metad_hosts) % 2 == 0 and len(metad_hosts) > 1:
-            validations.append({
-                "type": "configuration",
-                "level": "WARN",
-                "message": "建议Metad组件部署奇数个实例以确保选举正常",
-                "config-type": "nebula-metad-site",
-                "config-name": "port"
-            })
-        
-        # 验证STORAGED组件
-        storaged_hosts = component_hosts.get('NEBULA_STORAGED', [])
-        if len(storaged_hosts) < 3:
-            validations.append({
-                "type": "configuration",
-                "level": "WARN",
-                "message": "建议至少部署3个Storaged组件以确保数据冗余和高可用性",
-                "config-type": "nebula-storaged-site",
-                "config-name": "port"
-            })
-        
-        # 验证GRAPHD组件
-        graphd_hosts = component_hosts.get('NEBULA_GRAPHD', [])
-        if len(graphd_hosts) == 0:
-            validations.append({
-                "type": "configuration",
-                "level": "ERROR",
-                "message": "至少需要部署一个Graphd组件",
-                "config-type": "nebula-graphd-site",
-                "config-name": "port"
-            })
-        
-        return validations
-    
-    def _get_component_host_mapping(self, services):
-        """
-        获取组件与主机的映射关系
-        """
-        component_hosts = {}
-        
-        for service in services.get('services', []):
-            if service.get('StackServices', {}).get('service_name') == 'NEBULA':
-                for component in service.get('components', []):
-                    component_name = component.get('StackServiceComponents', {}).get('component_name')
-                    if component_name:
-                        component_hosts[component_name] = [
-                            host.get('HostRoles', {}).get('host_name')
-                            for host in component.get('host_components', [])
-                        ]
-        
-        return component_hosts
+        return []
 
 
 # 导出服务建议器实例
@@ -352,4 +175,8 @@ def validate_configurations(services, hosts):
     """
     验证配置的全局函数
     """
-    return service_advisor.validate_configurations(services, hosts)
+    try:
+        return service_advisor.get_service_component_layout_validations(services, hosts)
+    except Exception as e:
+        print("Error in validate_configurations: %s" % str(e))
+        return []

@@ -145,7 +145,11 @@ export NEBULA_GROUP={{nebula_group}}
 export NEBULA_CLUSTER_NAME={{nebula_cluster_name}}
 
 # Java相关环境变量
-export JAVA_HOME={{java_home}}
+if [ -n "$JAVA_HOME" ]; then
+    export JAVA_HOME=$JAVA_HOME
+else
+    export JAVA_HOME={{java64_home}}
+fi
 export JAVA_OPTS="-Xmx2g -Xms2g"
 
 # 系统环境变量

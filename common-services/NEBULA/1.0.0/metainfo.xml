@@ -32,10 +32,6 @@
           <category>MASTER</category>
           <cardinality>1+</cardinality>
           <versionAdvertised>true</versionAdvertised>
-          <auto-deploy>
-            <enabled>true</enabled>
-            <co-locate>NEBULA/NEBULA_CONSOLE</co-locate>
-          </auto-deploy>
           <dependencies>
             <dependency>
               <name>NEBULA/NEBULA_METAD</name>
@@ -85,10 +81,6 @@
           <category>MASTER</category>
           <cardinality>1+</cardinality>
           <versionAdvertised>true</versionAdvertised>
-          <auto-deploy>
-            <enabled>true</enabled>
-            <co-locate>NEBULA/NEBULA_CONSOLE</co-locate>
-          </auto-deploy>
           <dependencies>
             <dependency>
               <name>NEBULA/NEBULA_METAD</name>
